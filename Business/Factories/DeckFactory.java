@@ -1,9 +1,9 @@
 package Factories;
 
 import Enteties.Card;
-import Enteties.DoubleDeck;
-import Enteties.OrdinaryDeck;
-import Enteties.RandomDeck;
+import Game.Decks.DoubleDeck;
+import Game.Decks.OrdinaryDeck;
+import Game.Decks.RandomDeck;
 import Game.CardType;
 
 import java.util.ArrayList;

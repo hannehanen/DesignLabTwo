@@ -1,3 +1,5 @@
+package view;
+
 import Enteties.Card;
 import Enteties.Client;
 import Enteties.Dealer;
@@ -11,62 +13,42 @@ import java.util.Scanner;
 
 public class ConsollUserIMPL implements UserInterface, GameListener {
     private ArrayList<UserListener> listeners;
-    Scanner scanner;
-    ArrayList<Player> players;
+    private Scanner scanner;
     public ConsollUserIMPL(){
         listeners = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
-    public void playCardGame(){
-        String svar;
+    public void gameOptions(){
+        HashMap<String,Object> gameOptions = new HashMap<>();
+        ArrayList<String> clients = new ArrayList<>();
+        gameOptions.put("clients",clients);
         System.out.println("Klockan är ganska mycket och det är ju inte lätt att komma ihåg sitt namn såhär sent... vad hetter jag nu igen?(var god skriv ditt namn)");
-        String name = scanner.nextLine();
-        System.out.println("Kortspel! ja det vill jag ju spela!... hrm eller... har ju inte så mycket mer pengar att spela för.. ska jag?(ja/nej)");
-        svar = scanner.nextLine();
-        if(svar.equalsIgnoreCase("ja")){
-            notifyListeners("gameOn",name);
+        clients.add(scanner.nextLine());
+        System.out.println("Vad vill du använda för deck? Vanlig, Dubbel eller Random kort med viss mängd?");
+        String deckType = scanner.nextLine();
+        if(deckType.equalsIgnoreCase("random")){
+            System.out.println("Hur många randomkort skall leken innehålla?");
+            int amountOfCards = Integer.parseInt(scanner.nextLine());
+            gameOptions.put("amountWithRandomDeck",amountOfCards);
         }
-        else{
-            System.out.println("Smart val! Kyparen ser ju lite suspekt ut..");
-            return;
+        gameOptions.put("decktype",deckType);
+        System.out.println("Är det någon utöver dig som vill spela? Skriv isåfall antal.");
+        int amountOfExtraPlayers = Integer.parseInt(scanner.nextLine());
+        if(amountOfExtraPlayers>0){
+            for(int i =2;i<amountOfExtraPlayers+2;i++){
+                System.out.println("Namn på spelare "+i+" tack.");
+                clients.add(scanner.nextLine());
+            }
         }
+        notifyListeners("gameOptionsDone",gameOptions);
     }
     @Override
     public void updateUser(String command, Object data) {
-        if(command.equals("gameMode")){
-            //kanske på fel ställe, men får ha det för tillfället.
-            HashMap<String,Object> clientData = new HashMap<>();
-            System.out.println("Vad vill du använda för deck? Vanlig, Dubbel eller Random kort med viss mängd?");
-            String svar = scanner.nextLine();
-            clientData.put("decktype",svar);
-            if(svar.equalsIgnoreCase("random")){
-                System.out.println("Hur många randomkort skall leken innehålla?");
-                int amountOfCards = Integer.parseInt(scanner.nextLine());
-                clientData.put("amount",amountOfCards);
-                notifyListeners("decktype",clientData);
-            }
-            else{
 
-                notifyListeners("decktype",clientData);
-            }
-
-        }
-        if(command.equalsIgnoreCase("amountOfPlayers")){
-            System.out.println("Hur många spelare utöver dig vill spela spelet? Vi kan säga max... 10 st");
-            int players = Integer.parseInt(scanner.nextLine());
-            ArrayList<String> playerNames = new ArrayList<>();
-            if(players>0){
-                for(int i =2;i<players+2;i++){
-                    System.out.println("Namn på spelare "+i+" tack.");
-                    playerNames.add(scanner.nextLine());
-                }
-            }
-            notifyListeners("playerAmount",playerNames);
-        }
         if(command.equalsIgnoreCase("firstRondCardsDone")){
-            players = (ArrayList<Player>) data;
-            printCards();
-            printValue();
+            ArrayList<Client> clients = (ArrayList<Client>) data;
+            printCards(clients);
+            printValue(clients);
         }
         if(command.equalsIgnoreCase("hitOrStay")){
             Player player = (Player) data;
@@ -100,6 +82,7 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
             System.out.println(player.getName()+" du fick precis ett nytt kort! "+player.getCards().get(player.getCards().size()-1).toString());
         }
         if(command.equalsIgnoreCase("dealerCards")){
+            scanner.close();
             Dealer dealer = (Dealer) data;
             System.out.println("Dealern har nu dessa kort: "+dealer.getCardsToString()+" med värdet: "+dealer.getAllCardsValue());
         }
@@ -117,22 +100,21 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
             }
         }
         if(command.equalsIgnoreCase("winnersAndLoosers")){
-            HashMap<String,Object> winnersLoosers = (HashMap<String,Object>) data;
-            printOutWinnersAndLoosers(winnersLoosers);
+            ArrayList<Client> clients = (ArrayList<Client>) data;
+            printOutWinnersAndLoosers(clients);
         }
     }
 
-    private void printOutWinnersAndLoosers(HashMap<String,Object> winnersLoosers) {
-        ArrayList<Client> winners = (ArrayList<Client>)winnersLoosers.get("winners");
-        ArrayList<Client> loosers = (ArrayList<Client>) winnersLoosers.get("loosers");
-        for(Client client: winners){
-            System.out.println(client.getName()+" är vinnare!");
-        }
-        for(Client client: loosers){
-            System.out.println(client.getName()+" är förlorare! du fick värdet: "+client.getAllCardsValue());
+    private void printOutWinnersAndLoosers(ArrayList<Client> clients) {
+        for(Client client: clients){
+            if(client.isWinner()){
+                System.out.println(client.getName()+" är vinnare!");
+            }
+            else{
+                System.out.println(client.getName()+" är förlorare! du fick värdet: "+client.getAllCardsValue());
+            }
         }
     }
-
 
     public int printValueForAPlayer(Player player){
         int value =0;
@@ -142,18 +124,18 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
         return value;
     }
 
-    public void printCards(){
-        for (Player player: players){
-            System.out.println(player.getName()+" du har korten: "+player.getCardsToString());
+    public void printCards(ArrayList<Client> clients){
+        for (Player client: clients){
+            System.out.println(client.getName()+" du har korten: "+client.getCardsToString());
         }
     }
-    public void printValue(){
+    public void printValue(ArrayList<Client> clients){
         System.out.println();
-        for(Player player: players){
+        for(Player client: clients){
             int value = 0;
-            for(Card card: player.getCards()){
+            for(Card card: client.getCards()){
                 if(card.getValue()==1){
-                    System.out.println(player.getName()+" du har ett Ace. vill du ha värdet 1 eller 11? (skriv 1 eller 11)");
+                    System.out.println(client.getName()+" du har ett Ace. vill du ha värdet 1 eller 11? (skriv 1 eller 11)");
                     String svar = scanner.nextLine();
                     if(svar.equalsIgnoreCase("11")){
                         card.setAceLowValue(false);
@@ -164,7 +146,7 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
                 }
                 value += card.getValue();
             }
-            System.out.println(player.getName()+" dina kort har värdet "+value);
+            System.out.println(client.getName()+" dina kort har värdet "+value);
         }
     }
     @Override

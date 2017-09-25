@@ -1,19 +1,14 @@
-import Factories.DeckFactory;
+import Controllers.ConsollController;
 import Game.Game;
+import view.ConsollUserIMPL;
 
 public class main {
     public static void main(String[] args) {
-        Game game = new Game();
-        //kanske en facade som startas istället för nytt game? som viewn pratar med.. eller ännu bättre en controller?
-        ConsollUserIMPL view = new ConsollUserIMPL();
-        view.addListener(game);
-        game.addGameListener(view);
-        view.playCardGame();
-
-        //DeckFactory factory = new DeckFactory();
-        //game.setDeck(factory.getOrdinaryDeck());
-        //game.getDeck().shuffleDeck();
-        //game.playGame();
+        ConsollController consollController = new ConsollController();
+        ConsollUserIMPL consollUserIMPL = new ConsollUserIMPL();
+        consollController.addGameListener(consollUserIMPL);
+        consollUserIMPL.addListener(consollController);
+        consollUserIMPL.gameOptions();
 
     }
 }
