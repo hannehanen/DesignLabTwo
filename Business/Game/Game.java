@@ -31,4 +31,16 @@ public class Game {
     public void addPlayer(Client player){
         clients.add(player);
     }
+
+    public ArrayList<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(ArrayList<Client> clients) {
+        this.clients = clients;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
 }

@@ -7,11 +7,21 @@ public class Player {
     private   ArrayList<Card> cards;
     private boolean satisFiedWithCards;
     private boolean isFat;
+    private ArrayList<Move> moves;
     public Player(String name){
         isFat = false;
         satisFiedWithCards = false;
         this.name = name;
         cards =  new ArrayList<>();
+        moves = new ArrayList<>();
+    }
+
+    public ArrayList<Move> getMoves() {
+        return moves;
+    }
+
+    public void setMoves(ArrayList<Move> moves) {
+        this.moves = moves;
     }
 
     public boolean isFat() {

@@ -1,7 +1,7 @@
 package Controllers;
 
 import Enteties.*;
-import Factories.DeckFactory;
+import Game.Decks.DeckFactory;
 import Game.*;
 import Listeners.DealerListener;
 import Listeners.UserListener;
@@ -46,16 +46,18 @@ public class ConsollController implements UserListener, DealerListener{
             String svar =(String) playerAndAnswer.get("answer");
             Client player = (Client) playerAndAnswer.get("player");
             if(svar.equalsIgnoreCase("hit")){
-               Card card =  game.getDealer().givePlayerOneNewCard(player);
+                Card card =  game.getDealer().givePlayerOneNewCard(player);
                 if(card.getValue()==1){
                     notifyUsers("aceValue",player);
                 }
                 else{
                     notifyUsers("newCard",player);
                 }
+                player.getMoves().add(new Move(player.getMoves().size()+1,player.getAllCardsValue(),"HIT"));
             }
             if(svar.equalsIgnoreCase("stay")){
                 player.setSatisFiedWithCards(true);
+                player.getMoves().add(new Move(player.getMoves().size()+1,player.getAllCardsValue(),"STAY"));
                 notifyUsers("stay",player);
             }
         }

@@ -44,6 +44,7 @@ public class Dealer extends Client{
         for(Client player: clients){
             givePlayerOneNewCard(player);
             givePlayerOneNewCard(player);
+            player.getMoves().add(new Move(getMoves().size()+1,player.getAllCardsValue(),"First Move. No action"));
         }
         listener.listenToDealer("firstRondCardsDone",clients);
     }

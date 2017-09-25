@@ -1,4 +1,4 @@
-package Factories;
+package Game.Decks;
 
 import Enteties.Card;
 import Game.Decks.DoubleDeck;
