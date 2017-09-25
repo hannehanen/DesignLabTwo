@@ -7,6 +7,4 @@ public class DoubleDeck extends Deck  {
     public DoubleDeck(ArrayList<Card> cards) {
         super(cards);
     }
-
-
 }

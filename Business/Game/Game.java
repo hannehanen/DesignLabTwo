@@ -1,9 +1,6 @@
 package Game;
 
-import Enteties.Card;
-import Enteties.Deck;
-import Enteties.OrdinaryDeck;
-import Enteties.Player;
+import Enteties.*;
 import Factories.DeckFactory;
 import Listeners.UserListener;
 
@@ -11,12 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game implements UserListener{
+    private ArrayList<Player> loosers;
+    private ArrayList<Player> winners;
     private ArrayList<GameListener> gameListeners;
-    private ArrayList<Player> players;
+    private ArrayList<Client> clients;
     private Deck deck;
     private DeckFactory deckFactory;
+    private Dealer dealer;
     public Game (){
-        players = new ArrayList<>();
+        dealer = new Dealer("Dealer");
+        clients = new ArrayList<>();
         deckFactory = new DeckFactory();
         gameListeners = new ArrayList<GameListener>();
     }
@@ -30,20 +31,28 @@ public class Game implements UserListener{
     @Override
     public void listenToUser(String command, Object data) {
         if(command.equals("gameOn")){
-            Player player1 = new Player((String) data);
+            Client player1 = new Client((String) data);
             addPlayer(player1);
             notifyUsers("gameMode",null);
         }
         if(command.equals("decktype")){
-            String svar = (String) data;
+            HashMap<String,Object> clientData = (HashMap<String, Object>) data;
+            String svar = (String) clientData.get("decktype");
             if(svar.equalsIgnoreCase("vanlig")){
                deck = deckFactory.getOrdinaryDeck();
-               notifyUsers("amountOfPlayers",null);
             }
+            if(svar.equalsIgnoreCase("dubbel")){
+                deck = deckFactory.getDoubleDeck();
+            }
+            if(svar.equalsIgnoreCase("random")){
+                int amount = (int)clientData.get("amount");
+                deck = deckFactory.getRandomDeck(amount);
+            }
+            notifyUsers("amountOfPlayers",null);
         }
         if(command.equalsIgnoreCase("playerAmount")){
             for(String player: (ArrayList<String>)data){
-                addPlayer(new Player(player));
+                addPlayer(new Client(player));
             }
             deck.shuffleDeck();
             startDealingCards();
@@ -51,7 +60,7 @@ public class Game implements UserListener{
         if(command.equalsIgnoreCase("hitOrStay")){
             HashMap<String,Object> playerAndAnswer = (HashMap<String,Object>) data;
             String svar =(String) playerAndAnswer.get("answer");
-            Player player = (Player) playerAndAnswer.get("player");
+            Client player = (Client) playerAndAnswer.get("player");
             if(svar.equalsIgnoreCase("hit")){
                 givePlayerOneNewCard(player);
             }
@@ -82,13 +91,10 @@ public class Game implements UserListener{
         else{
             notifyUsers("newCard",player);
         }
-
-
     }
 
-
     public void askPlayersToHitOrStay(){
-        for(Player player: players){
+        for(Player player: clients){
             while(player.isSatisFiedWithCards()==false&&player.isFat()==false){
                 if(player.getAllCardsValue()>21){
                     notifyUsers("Fat",player);
@@ -99,18 +105,55 @@ public class Game implements UserListener{
                 }
             }
         }
+        //dessa borde inte vara här!
         dealerDrawCards();
+        calculateWinner();
     }
-    public void dealerDrawCards(){
 
+    private void calculateWinner() {
+        winners = new ArrayList<>();
+        loosers = new ArrayList<>();
+        for(Client client: clients){
+            if(client.getAllCardsValue()==21){
+                winners.add(client);
+            }
+            else if(!client.isFat()&&dealer.isFat()){
+                winners.add(client);
+            }
+           else if(!client.isFat()&&client.getAllCardsValue()>dealer.getAllCardsValue()){
+                winners.add(client);
+            }
+            else  {
+                loosers.add(client);
+            }
+        }
+        HashMap<String,Object> winnersLoosers = new HashMap<>();
+        winnersLoosers.put("winners",winners);
+        winnersLoosers.put("loosers",loosers);
+        notifyUsers("winnersAndLoosers",winnersLoosers);
+    }
+
+    public void dealerDrawCards(){
+        Card card = deck.getTopCard();
+        dealer.addCard(card);
+        Card card2 = deck.getTopCard();
+        dealer.addCard(card2);
+        dealer.dealerCalculatingCards();
+        notifyUsers("dealerCards",dealer);
+        while (!dealer.isSatisFiedWithCards()){
+            dealer.addCard(deck.getTopCard());
+            dealer.dealerCalculatingCards();
+            notifyUsers("dealerDrawCard",dealer);
+        }
+        notifyUsers("dealerHappy",dealer);
     }
 
     public void startDealingCards(){
-        for(Player player: players){
+        for(Client player: clients){
             player.addCard(deck.getTopCard());
             player.addCard(deck.getTopCard());
         }
-        notifyUsers("firstRondCardsDone",players);
+        notifyUsers("firstRondCardsDone", clients);
         askPlayersToHitOrStay();
     }
 
@@ -121,8 +164,8 @@ public class Game implements UserListener{
             listener.updateUser(command,data);
         }
     }
-    public void addPlayer(Player player){
-        players.add(player);
+    public void addPlayer(Client player){
+        clients.add(player);
     }
     public Deck getDeck(){
         return this.deck;

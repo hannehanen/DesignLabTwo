@@ -1,4 +1,6 @@
 import Enteties.Card;
+import Enteties.Client;
+import Enteties.Dealer;
 import Enteties.Player;
 import Game.GameListener;
 import Listeners.UserListener;
@@ -33,8 +35,21 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
     public void updateUser(String command, Object data) {
         if(command.equals("gameMode")){
             //kanske på fel ställe, men får ha det för tillfället.
+            HashMap<String,Object> clientData = new HashMap<>();
             System.out.println("Vad vill du använda för deck? Vanlig, Dubbel eller Random kort med viss mängd?");
-            notifyListeners("decktype",scanner.nextLine());
+            String svar = scanner.nextLine();
+            clientData.put("decktype",svar);
+            if(svar.equalsIgnoreCase("random")){
+                System.out.println("Hur många randomkort skall leken innehålla?");
+                int amountOfCards = Integer.parseInt(scanner.nextLine());
+                clientData.put("amount",amountOfCards);
+                notifyListeners("decktype",clientData);
+            }
+            else{
+
+                notifyListeners("decktype",clientData);
+            }
+
         }
         if(command.equalsIgnoreCase("amountOfPlayers")){
             System.out.println("Hur många spelare utöver dig vill spela spelet? Vi kan säga max... 10 st");
@@ -84,9 +99,39 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
             Player player = (Player) data;
             System.out.println(player.getName()+" du fick precis ett nytt kort! "+player.getCards().get(player.getCards().size()-1).toString());
         }
+        if(command.equalsIgnoreCase("dealerCards")){
+            Dealer dealer = (Dealer) data;
+            System.out.println("Dealern har nu dessa kort: "+dealer.getCardsToString()+" med värdet: "+dealer.getAllCardsValue());
+        }
+        if(command.equalsIgnoreCase("dealerDrawCard")){
+            Dealer dealer = (Dealer) data;
+            System.out.println("Dealern drog just detta kort: "+dealer.getCards().get(dealer.getCards().size()-1).toString());
+        }
+        if(command.equalsIgnoreCase("dealerHappy")){
+            Dealer dealer = (Dealer) data;
+            if(dealer.getAllCardsValue()>21){
+                System.out.println("Dealern är tjock med dessa kort: "+dealer.getCardsToString()+" och har värdet: "+dealer.getAllCardsValue());
+            }
+            else{
+                System.out.println("Dealern är nu nöjd med dessa kort: "+dealer.getCardsToString()+" och har värdet: "+dealer.getAllCardsValue());
+            }
+        }
+        if(command.equalsIgnoreCase("winnersAndLoosers")){
+            HashMap<String,Object> winnersLoosers = (HashMap<String,Object>) data;
+            printOutWinnersAndLoosers(winnersLoosers);
+        }
     }
 
-
+    private void printOutWinnersAndLoosers(HashMap<String,Object> winnersLoosers) {
+        ArrayList<Client> winners = (ArrayList<Client>)winnersLoosers.get("winners");
+        ArrayList<Client> loosers = (ArrayList<Client>) winnersLoosers.get("loosers");
+        for(Client client: winners){
+            System.out.println(client.getName()+" är vinnare!");
+        }
+        for(Client client: loosers){
+            System.out.println(client.getName()+" är förlorare! du fick värdet: "+client.getAllCardsValue());
+        }
+    }
 
 
     public int printValueForAPlayer(Player player){
