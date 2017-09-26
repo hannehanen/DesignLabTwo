@@ -9,6 +9,7 @@ import Game.Highscore.Highscore;
 import Listeners.DealerListener;
 import Listeners.ControllerListener;
 import Listeners.ViewListener;
+import storage.DAO.DAOFactory;
 import storage.Facade.StorageFacade;
 
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class ConsollController implements ViewListener, DealerListener{
         }
         if(command.equalsIgnoreCase("highscore")){
             StorageFacade facade = StorageFacade.getInstance();
+            DAOFactory factory = new DAOFactory();
+            facade.setDAO(factory.getJsonDAO());
             Highscore leader = facade.getHighScore();
             notifyUsers("highscoreLeader",leader);
         }

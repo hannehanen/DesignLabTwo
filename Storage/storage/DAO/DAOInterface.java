@@ -1,6 +1,5 @@
 package storage.DAO;
 
-import Game.Game;
 import storage.Entity.GameLoggingClass;
 
 import java.util.ArrayList;

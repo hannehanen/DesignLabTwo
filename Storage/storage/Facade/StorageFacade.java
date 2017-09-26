@@ -2,7 +2,7 @@ package storage.Facade;
 
 import Game.Clients.Client;
 import Game.Game;
-import storage.DAO.JsonDAO;
+import storage.DAO.DAOInterface;
 import storage.Entity.GameLoggingClass;
 import Game.Highscore.Highscore;
 
@@ -11,21 +11,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StorageFacade {
-    private JsonDAO jsonDAO;
+    private DAOInterface dao;
     private static StorageFacade storageFacade = new StorageFacade();
     private StorageFacade(){
-        this.jsonDAO = new JsonDAO();
     }
+
+    public void setDAO(DAOInterface dao){
+        this.dao = dao;
+    }
+
     public static StorageFacade getInstance(){
         return storageFacade;
     }
 
     public void logGame(Game game){
         GameLoggingClass storeObject = new GameLoggingClass(game.getClients());
-        jsonDAO.storeGame(storeObject);
+        dao.storeGame(storeObject);
     }
     public Highscore getHighScore(){
-        ArrayList<GameLoggingClass> data = jsonDAO.getGames();
+        ArrayList<GameLoggingClass> data = dao.getGames();
         HashMap<String,Integer> score = new HashMap<String, Integer>();
         for(GameLoggingClass item: data){
             for(Client client: item.getClients()){

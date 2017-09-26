@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ConsollUserIMPL implements UserInterface, ControllerListener {
+public class ConsollUserIMPL implements  ControllerListener {
     private ArrayList<ViewListener> listeners;
     private Scanner scanner;
     public ConsollUserIMPL(){
@@ -161,7 +161,7 @@ public class ConsollUserIMPL implements UserInterface, ControllerListener {
             System.out.println(client.getName()+" dina kort har värdet "+value);
         }
     }
-    @Override
+
     public void notifyListeners(String command,Object data) {
         for(ViewListener listener: listeners){
             listener.listenToUser(command,data);

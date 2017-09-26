@@ -2,6 +2,7 @@ package Game;
 import Game.Clients.Client;
 import Game.Clients.Dealer;
 import Game.Decks.DeckFactory;
+import storage.DAO.DAOFactory;
 import storage.Facade.StorageFacade;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ public class Game {
         if(type.equalsIgnoreCase("random")){
             getDealer().setDeck(deckFactory.getRandomDeck(amount));
         }
-
     }
     public void createDeck(String type){
         if(type.equalsIgnoreCase("vanlig")){
@@ -42,6 +42,8 @@ public class Game {
 
     private void logThisGame() {
         StorageFacade storageFacade = StorageFacade.getInstance();
+        DAOFactory factory = new DAOFactory();
+        storageFacade.setDAO(factory.getJsonDAO());
         storageFacade.logGame(this);
     }
 

@@ -15,10 +15,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JsonDAO implements  DAOInterface {
-
-    ObjectMapper objectMapper;
-    public JsonDAO(){
+    private static JsonDAO jsonDAO = new JsonDAO();
+    private ObjectMapper objectMapper;
+    private JsonDAO(){
         objectMapper = new ObjectMapper();
+    }
+
+    public static JsonDAO getInstance(){
+        return jsonDAO;
     }
 
     @Override
