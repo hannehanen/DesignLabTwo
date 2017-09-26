@@ -1,14 +1,17 @@
 package Game;
-import Enteties.*;
+import Game.Clients.Client;
+import Game.Clients.Dealer;
+import Game.Decks.DeckFactory;
 import storage.Facade.StorageFacade;
 
 import java.util.ArrayList;
 public class Game {
     private ArrayList<Client> clients;
     private Dealer dealer;
-
+    private DeckFactory deckFactory;
     public Game (){
         dealer = new Dealer("Dealer");
+        deckFactory = new DeckFactory();
         clients = new ArrayList<>();
         }
     public void playGame(){
@@ -18,6 +21,20 @@ public class Game {
         dealer.dealerDrawCards();
         dealer.calculateWinner(clients);
         logThisGame();
+    }
+    public void createDeck(String type,int amount){
+        if(type.equalsIgnoreCase("random")){
+            getDealer().setDeck(deckFactory.getRandomDeck(amount));
+        }
+
+    }
+    public void createDeck(String type){
+        if(type.equalsIgnoreCase("vanlig")){
+            getDealer().setDeck(deckFactory.getOrdinaryDeck());
+        }
+        if(type.equalsIgnoreCase("dubbel")){
+            getDealer().setDeck(deckFactory.getDoubleDeck());
+        }
     }
 
     private void logThisGame() {

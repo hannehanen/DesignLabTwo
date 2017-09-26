@@ -1,4 +1,6 @@
-package Enteties;
+package Game.Clients.Moves;
+
+import Game.Game;
 
 public class Move {
     private int moveNumber;

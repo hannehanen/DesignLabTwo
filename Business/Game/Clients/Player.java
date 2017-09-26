@@ -1,10 +1,13 @@
-package Enteties;
+package Game.Clients;
+
+import Game.Clients.Moves.Move;
+import Game.Decks.Card.Card;
 
 import java.util.ArrayList;
 
 public class Player {
     private String name;
-    private   ArrayList<Card> cards;
+    private ArrayList<Card> cards;
     private boolean satisFiedWithCards;
     private boolean isFat;
     private ArrayList<Move> moves;

@@ -1,10 +1,10 @@
 package view;
 
-import Enteties.Card;
-import Enteties.Client;
-import Enteties.Dealer;
-import Enteties.Player;
-import Game.GameListener;
+import Game.Decks.Card.Card;
+import Game.Clients.Client;
+import Game.Clients.Dealer;
+import Game.Clients.Player;
+import Listeners.GameListener;
 import Listeners.UserListener;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
         HashMap<String,Object> gameOptions = new HashMap<>();
         ArrayList<String> clients = new ArrayList<>();
         gameOptions.put("clients",clients);
-        System.out.println("Klockan är ganska mycket och det är ju inte lätt att komma ihåg sitt namn såhär sent... vad hetter jag nu igen?(var god skriv ditt namn)");
+        System.out.println("Klockan är ganska mycket och det är ju inte lätt att komma ihåg sitt namn såhär sent... vad heter jag nu igen?(var god skriv ditt namn)");
         clients.add(scanner.nextLine());
         System.out.println("Vad vill du använda för deck? Vanlig, Dubbel eller Random kort med viss mängd?");
         String deckType = scanner.nextLine();
@@ -44,7 +44,6 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
     }
     @Override
     public void updateUser(String command, Object data) {
-
         if(command.equalsIgnoreCase("firstRondCardsDone")){
             ArrayList<Client> clients = (ArrayList<Client>) data;
             printCards(clients);
@@ -108,7 +107,7 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
     private void printOutWinnersAndLoosers(ArrayList<Client> clients) {
         for(Client client: clients){
             if(client.isWinner()){
-                System.out.println(client.getName()+" är vinnare!");
+                System.out.println(client.getName()+" är vinnare! du fick värdet: "+client.getAllCardsValue());
             }
             else{
                 System.out.println(client.getName()+" är förlorare! du fick värdet: "+client.getAllCardsValue());

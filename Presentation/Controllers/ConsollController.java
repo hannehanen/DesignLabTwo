@@ -1,9 +1,12 @@
 package Controllers;
 
-import Enteties.*;
+import Game.Clients.Client;
+import Game.Clients.Moves.Move;
+import Game.Decks.Card.Card;
 import Game.Decks.DeckFactory;
 import Game.*;
 import Listeners.DealerListener;
+import Listeners.GameListener;
 import Listeners.UserListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +32,12 @@ public class ConsollController implements UserListener, DealerListener{
                 game.addPlayer(new Client(client));
             }
             String deckType = (String) gameOptions.get("decktype");
-            if(deckType.equalsIgnoreCase("vanlig")){
-               game.getDealer().setDeck(deckFactory.getOrdinaryDeck());
-            }
-            if(deckType.equalsIgnoreCase("dubbel")){
-                game.getDealer().setDeck(deckFactory.getDoubleDeck());
-            }
             if(deckType.equalsIgnoreCase("random")){
                 int amount = (int)gameOptions.get("amountWithRandomDeck");
-                game.getDealer().setDeck(deckFactory.getRandomDeck(amount));
+                game.createDeck(deckType,amount);
+            }
+            else{
+                game.createDeck(deckType);
             }
             game.playGame();
         }

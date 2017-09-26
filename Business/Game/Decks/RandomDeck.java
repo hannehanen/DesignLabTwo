@@ -1,8 +1,7 @@
 package Game.Decks;
 
 
-import Enteties.Card;
-import Enteties.Deck;
+import Game.Decks.Card.Card;
 
 import java.util.ArrayList;
 

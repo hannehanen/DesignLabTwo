@@ -1,11 +1,12 @@
-package Enteties;
+package Game.Decks;
+
+import Game.Decks.Card.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
     private ArrayList<Card> cards;
-
     public Deck(ArrayList<Card> cards) {
         this.cards = cards;
     }

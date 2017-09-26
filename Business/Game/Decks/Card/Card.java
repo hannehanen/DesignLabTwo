@@ -1,6 +1,4 @@
-package Enteties;
-
-import Game.CardType;
+package Game.Decks.Card;
 
 public class Card {
     private int value;

@@ -1,4 +1,4 @@
-package Enteties;
+package Game.Clients;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

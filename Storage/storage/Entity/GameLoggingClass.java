@@ -1,6 +1,6 @@
 package storage.Entity;
 
-import Enteties.Client;
+import Game.Clients.Client;
 
 
 import java.util.ArrayList;

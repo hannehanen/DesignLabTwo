@@ -1,10 +1,7 @@
 package Game.Decks;
 
-import Enteties.Card;
-import Game.Decks.DoubleDeck;
-import Game.Decks.OrdinaryDeck;
-import Game.Decks.RandomDeck;
-import Game.CardType;
+import Game.Decks.Card.Card;
+import Game.Decks.Card.CardType;
 
 import java.util.ArrayList;
 import java.util.Collections;

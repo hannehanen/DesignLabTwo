@@ -1,9 +1,13 @@
-package Enteties;
+package Game.Clients;
 
+
+import Game.Clients.Moves.Move;
+import Game.Decks.Card.Card;
+import Game.Decks.Deck;
 import Listeners.DealerListener;
 import java.util.ArrayList;
 
-public class Dealer extends Client{
+public class Dealer extends Client {
     private DealerListener listener;
     private Deck deck;
     public Dealer(String name) {
