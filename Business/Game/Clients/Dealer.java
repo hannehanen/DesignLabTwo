@@ -27,6 +27,9 @@ public class Dealer extends Client {
         player.addCard(card);
         return card;
     }
+    public void tellHighScore(){
+        listener.listenToDealer("highscore",null);
+    }
     public void dealerDrawCards(){
         Card card = deck.getTopCard();
         addCard(card);

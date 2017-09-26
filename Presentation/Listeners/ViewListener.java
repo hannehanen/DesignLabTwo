@@ -1,5 +1,5 @@
 package Listeners;
 
-public interface UserListener {
+public interface ViewListener {
     public void listenToUser(String command, Object data);
 }

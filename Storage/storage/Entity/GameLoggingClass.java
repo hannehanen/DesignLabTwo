@@ -1,12 +1,15 @@
 package storage.Entity;
 
 import Game.Clients.Client;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 
 import java.util.ArrayList;
 
 public class GameLoggingClass {
-
+    @JsonCreator
+    public GameLoggingClass(){
+    }
     private ArrayList<Client> clients;
 
     public GameLoggingClass(ArrayList<Client> clients) {

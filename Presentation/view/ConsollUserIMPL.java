@@ -4,15 +4,16 @@ import Game.Decks.Card.Card;
 import Game.Clients.Client;
 import Game.Clients.Dealer;
 import Game.Clients.Player;
-import Listeners.GameListener;
-import Listeners.UserListener;
+import Game.Highscore.Highscore;
+import Listeners.ControllerListener;
+import Listeners.ViewListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ConsollUserIMPL implements UserInterface, GameListener {
-    private ArrayList<UserListener> listeners;
+public class ConsollUserIMPL implements UserInterface, ControllerListener {
+    private ArrayList<ViewListener> listeners;
     private Scanner scanner;
     public ConsollUserIMPL(){
         listeners = new ArrayList<>();
@@ -81,7 +82,7 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
             System.out.println(player.getName()+" du fick precis ett nytt kort! "+player.getCards().get(player.getCards().size()-1).toString());
         }
         if(command.equalsIgnoreCase("dealerCards")){
-            scanner.close();
+
             Dealer dealer = (Dealer) data;
             System.out.println("Dealern har nu dessa kort: "+dealer.getCardsToString()+" med värdet: "+dealer.getAllCardsValue());
         }
@@ -101,6 +102,18 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
         if(command.equalsIgnoreCase("winnersAndLoosers")){
             ArrayList<Client> clients = (ArrayList<Client>) data;
             printOutWinnersAndLoosers(clients);
+        }
+        if(command.equalsIgnoreCase("highScore")){
+            System.out.println("vill du se highscoren? (ja/nej)");
+            String svar = scanner.nextLine();
+            if(svar.equalsIgnoreCase("ja")){
+                notifyListeners("highscore",null);
+            }
+            scanner.close();
+        }
+        if(command.equalsIgnoreCase("highscoreLeader")){
+            Highscore leader = (Highscore)data;
+            System.out.println("Den som har vunnit mest är: "+leader.getName()+" med såhär många wins: "+leader.getWins());
         }
     }
 
@@ -150,11 +163,11 @@ public class ConsollUserIMPL implements UserInterface, GameListener {
     }
     @Override
     public void notifyListeners(String command,Object data) {
-        for(UserListener listener: listeners){
+        for(ViewListener listener: listeners){
             listener.listenToUser(command,data);
         }
     }
-    public void addListener(UserListener listener){
+    public void addListener(ViewListener listener){
         listeners.add(listener);
     }
 }

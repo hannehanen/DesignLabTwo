@@ -21,7 +21,10 @@ public class Game {
         dealer.dealerDrawCards();
         dealer.calculateWinner(clients);
         logThisGame();
+        dealer.tellHighScore();
     }
+
+
     public void createDeck(String type,int amount){
         if(type.equalsIgnoreCase("random")){
             getDealer().setDeck(deckFactory.getRandomDeck(amount));

@@ -1,12 +1,14 @@
 package storage.Facade;
 
+import Game.Clients.Client;
 import Game.Game;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import storage.DAO.JsonDAO;
 import storage.Entity.GameLoggingClass;
+import Game.Highscore.Highscore;
 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StorageFacade {
     private JsonDAO jsonDAO;
@@ -17,18 +19,41 @@ public class StorageFacade {
     public static StorageFacade getInstance(){
         return storageFacade;
     }
-    public void logGame(Game game){
 
-        ObjectMapper mapper = new ObjectMapper();
+    public void logGame(Game game){
         GameLoggingClass storeObject = new GameLoggingClass(game.getClients());
-        try {
-            String objectInJasonString = mapper.writeValueAsString(storeObject);
-            PrintWriter printWriter = new PrintWriter(new FileOutputStream(new File("game.json"),true));
-            printWriter.println(objectInJasonString);
-          //  printWriter.append(""+objectInJasonString);
-            printWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        jsonDAO.storeGame(storeObject);
     }
+    public Highscore getHighScore(){
+        ArrayList<GameLoggingClass> data = jsonDAO.getGames();
+        HashMap<String,Integer> score = new HashMap<String, Integer>();
+        for(GameLoggingClass item: data){
+            for(Client client: item.getClients()){
+                if(score.get(client.getName())==null){
+                    score.put(client.getName(),0);
+                    if(client.isWinner()){
+                        score.put(client.getName(),score.get(client.getName())+1);
+                    }
+                }
+                else{
+                    if(client.isWinner()){
+                        score.put(client.getName(),score.get(client.getName())+1);
+                    }
+                }
+            }
+
+        }
+        String highScoreName ="";
+        Integer highScore =0;
+        for(Map.Entry<String,Integer> scoreValue: score.entrySet()){
+            Integer playerScore = scoreValue.getValue();
+            if(playerScore>highScore){
+                highScore = playerScore;
+                highScoreName = scoreValue.getKey();
+            }
+        }
+        Highscore highscore = new Highscore(highScoreName,highScore);
+        return highscore;
+    }
+
 }

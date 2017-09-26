@@ -2,8 +2,10 @@ package Game.Clients;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(value = { "isWinner","cards","satisFiedWithCards","cardsToString","fat" })
+@JsonIgnoreProperties(value = { "isWinner","cards","satisFiedWithCards","cardsToString","fat","allCardsValue" })
 public class Client extends Player {
+    public Client (){
+    }
     public Client(String name) {
         super(name);
         isWinner = false;

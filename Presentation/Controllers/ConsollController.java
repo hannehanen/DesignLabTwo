@@ -5,20 +5,23 @@ import Game.Clients.Moves.Move;
 import Game.Decks.Card.Card;
 import Game.Decks.DeckFactory;
 import Game.*;
+import Game.Highscore.Highscore;
 import Listeners.DealerListener;
-import Listeners.GameListener;
-import Listeners.UserListener;
+import Listeners.ControllerListener;
+import Listeners.ViewListener;
+import storage.Facade.StorageFacade;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ConsollController implements UserListener, DealerListener{
+public class ConsollController implements ViewListener, DealerListener{
     private Game game;
-    private ArrayList<GameListener> gameListeners;
+    private ArrayList<ControllerListener> gameListeners;
     private DeckFactory deckFactory;
 
     public ConsollController(){
         deckFactory = new DeckFactory();
-        gameListeners= new ArrayList<GameListener>();
+        gameListeners= new ArrayList<ControllerListener>();
     }
 
     @Override
@@ -72,13 +75,18 @@ public class ConsollController implements UserListener, DealerListener{
                 card.setAceLowValue(false);
             }
         }
+        if(command.equalsIgnoreCase("highscore")){
+            StorageFacade facade = StorageFacade.getInstance();
+            Highscore leader = facade.getHighScore();
+            notifyUsers("highscoreLeader",leader);
+        }
     }
 
-    public void addGameListener(GameListener listener){
+    public void addGameListener(ControllerListener listener){
         this.gameListeners.add(listener);
     }
     public void notifyUsers(String command,Object data){
-        for(GameListener listener: gameListeners){
+        for(ControllerListener listener: gameListeners){
             listener.updateUser(command,data);
         }
     }
@@ -96,6 +104,7 @@ public class ConsollController implements UserListener, DealerListener{
         }
         if(command.equalsIgnoreCase("winnersAndLoosers")){
             notifyUsers("winnersAndLoosers",data);
+
         }
         if(command.equalsIgnoreCase("firstRondCardsDone")){
             notifyUsers("firstRondCardsDone", data);
@@ -105,6 +114,9 @@ public class ConsollController implements UserListener, DealerListener{
         }
         if(command.equalsIgnoreCase("hitOrStay")){
             notifyUsers("hitOrStay",data);
+        }
+        if(command.equalsIgnoreCase("highscore")){
+            notifyUsers("highScore",null);
         }
     }
 }

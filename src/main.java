@@ -8,6 +8,5 @@ public class main {
         consollController.addGameListener(consollUserIMPL);
         consollUserIMPL.addListener(consollController);
         consollUserIMPL.gameOptions();
-
     }
 }

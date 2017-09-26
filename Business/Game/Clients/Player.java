@@ -5,12 +5,14 @@ import Game.Decks.Card.Card;
 
 import java.util.ArrayList;
 
-public class Player {
+public abstract class Player {
     private String name;
     private ArrayList<Card> cards;
     private boolean satisFiedWithCards;
     private boolean isFat;
     private ArrayList<Move> moves;
+    public Player(){
+    }
     public Player(String name){
         isFat = false;
         satisFiedWithCards = false;

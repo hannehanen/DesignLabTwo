@@ -6,7 +6,8 @@ public class Move {
     private int moveNumber;
     private int value;
     private String action;
-
+    public Move(){
+    }
     public Move(int moveNumber, int value, String action){
         this.moveNumber = moveNumber;
         this.value= value;
