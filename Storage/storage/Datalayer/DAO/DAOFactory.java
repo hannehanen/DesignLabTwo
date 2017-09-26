@@ -1,4 +1,4 @@
-package storage.DAO;
+package storage.Datalayer.DAO;
 
 public class DAOFactory {
     public JsonDAO getJsonDAO(){

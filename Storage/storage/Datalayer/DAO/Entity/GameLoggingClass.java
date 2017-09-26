@@ -1,4 +1,4 @@
-package storage.Entity;
+package storage.Datalayer.DAO.Entity;
 
 import Game.Clients.Client;
 import com.fasterxml.jackson.annotation.JsonCreator;

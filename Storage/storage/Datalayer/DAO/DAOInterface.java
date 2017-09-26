@@ -1,6 +1,6 @@
-package storage.DAO;
+package storage.Datalayer.DAO;
 
-import storage.Entity.GameLoggingClass;
+import storage.Datalayer.DAO.Entity.GameLoggingClass;
 
 import java.util.ArrayList;
 

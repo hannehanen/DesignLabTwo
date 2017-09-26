@@ -9,8 +9,8 @@ import Game.Highscore.Highscore;
 import Listeners.DealerListener;
 import Listeners.ControllerListener;
 import Listeners.ViewListener;
-import storage.DAO.DAOFactory;
-import storage.Facade.StorageFacade;
+import storage.Datalayer.DAO.DAOFactory;
+import storage.Persistance.Facade.StorageFacade;
 
 import java.util.ArrayList;
 import java.util.HashMap;

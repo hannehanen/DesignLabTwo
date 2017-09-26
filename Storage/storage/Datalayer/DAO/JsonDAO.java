@@ -1,16 +1,13 @@
-package storage.DAO;
+package storage.Datalayer.DAO;
 
-import Game.Game;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import storage.Entity.GameLoggingClass;
+import storage.Datalayer.DAO.Entity.GameLoggingClass;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 

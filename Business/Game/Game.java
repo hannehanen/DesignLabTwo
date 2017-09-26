@@ -2,8 +2,8 @@ package Game;
 import Game.Clients.Client;
 import Game.Clients.Dealer;
 import Game.Decks.DeckFactory;
-import storage.DAO.DAOFactory;
-import storage.Facade.StorageFacade;
+import storage.Datalayer.DAO.DAOFactory;
+import storage.Persistance.Facade.StorageFacade;
 
 import java.util.ArrayList;
 public class Game {

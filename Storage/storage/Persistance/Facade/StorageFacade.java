@@ -1,9 +1,9 @@
-package storage.Facade;
+package storage.Persistance.Facade;
 
 import Game.Clients.Client;
 import Game.Game;
-import storage.DAO.DAOInterface;
-import storage.Entity.GameLoggingClass;
+import storage.Datalayer.DAO.DAOInterface;
+import storage.Datalayer.DAO.Entity.GameLoggingClass;
 import Game.Highscore.Highscore;
 
 import java.util.ArrayList;
