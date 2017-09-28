@@ -1,18 +1,20 @@
 package Game;
 import Game.Clients.Client;
 import Game.Clients.Dealer;
-import Game.Decks.DeckFactory;
-import storage.Datalayer.DAO.DAOFactory;
+import Game.Decks.Deck;
+import storage.Datalayer.DAO.AbstractDAOFactory;
+import storage.Datalayer.DAO.DAOInterface;
+import storage.Datalayer.DAO.DAOJson;
 import storage.Persistance.Facade.StorageFacade;
 
 import java.util.ArrayList;
 public class Game {
     private ArrayList<Client> clients;
     private Dealer dealer;
-    private DeckFactory deckFactory;
+    private Deck deck;
     public Game (){
         dealer = new Dealer("Dealer");
-        deckFactory = new DeckFactory();
+        deck = new Deck();
         clients = new ArrayList<>();
         }
     public void playGame(){
@@ -28,22 +30,23 @@ public class Game {
 
     public void createDeck(String type,int amount){
         if(type.equalsIgnoreCase("random")){
-            getDealer().setDeck(deckFactory.getRandomDeck(amount));
+            getDealer().setDeck(deck.getRandomDeck(amount));
         }
     }
     public void createDeck(String type){
         if(type.equalsIgnoreCase("vanlig")){
-            getDealer().setDeck(deckFactory.getOrdinaryDeck());
+            getDealer().setDeck(deck.getOrdinaryDeck());
         }
         if(type.equalsIgnoreCase("dubbel")){
-            getDealer().setDeck(deckFactory.getDoubleDeck());
+            getDealer().setDeck(deck.getDoubleDeck());
         }
     }
 
     private void logThisGame() {
         StorageFacade storageFacade = StorageFacade.getInstance();
-        DAOFactory factory = new DAOFactory();
-        storageFacade.setDAO(factory.getJsonDAO());
+        AbstractDAOFactory factory = new DAOJson();
+        DAOInterface storeJson = factory.getDAO();
+        storageFacade.setDAO(storeJson);
         storageFacade.logGame(this);
     }
 

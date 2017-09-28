@@ -3,13 +3,15 @@ package Controllers;
 import Game.Clients.Client;
 import Game.Clients.Moves.Move;
 import Game.Decks.Card.Card;
-import Game.Decks.DeckFactory;
+import Game.Decks.Deck;
 import Game.*;
 import Game.Highscore.Highscore;
 import Listeners.DealerListener;
 import Listeners.ControllerListener;
 import Listeners.ViewListener;
-import storage.Datalayer.DAO.DAOFactory;
+import storage.Datalayer.DAO.AbstractDAOFactory;
+import storage.Datalayer.DAO.DAOInterface;
+import storage.Datalayer.DAO.DAOJson;
 import storage.Persistance.Facade.StorageFacade;
 
 import java.util.ArrayList;
@@ -18,10 +20,10 @@ import java.util.HashMap;
 public class ConsollController implements ViewListener, DealerListener{
     private Game game;
     private ArrayList<ControllerListener> gameListeners;
-    private DeckFactory deckFactory;
+    private Deck deck;
 
     public ConsollController(){
-        deckFactory = new DeckFactory();
+        deck = new Deck();
         gameListeners= new ArrayList<ControllerListener>();
     }
 
@@ -78,8 +80,9 @@ public class ConsollController implements ViewListener, DealerListener{
         }
         if(command.equalsIgnoreCase("highscore")){
             StorageFacade facade = StorageFacade.getInstance();
-            DAOFactory factory = new DAOFactory();
-            facade.setDAO(factory.getJsonDAO());
+            AbstractDAOFactory factory = new DAOJson();
+            DAOInterface store = factory.getDAO();
+            facade.setDAO(store);
             Highscore leader = facade.getHighScore();
             notifyUsers("highscoreLeader",leader);
         }

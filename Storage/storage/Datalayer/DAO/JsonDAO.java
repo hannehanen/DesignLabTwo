@@ -12,15 +12,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JsonDAO implements  DAOInterface {
-    private static JsonDAO jsonDAO = new JsonDAO();
+
     private ObjectMapper objectMapper;
-    private JsonDAO(){
+    public JsonDAO(){
         objectMapper = new ObjectMapper();
     }
 
-    public static JsonDAO getInstance(){
-        return jsonDAO;
-    }
 
     @Override
     public void storeGame(GameLoggingClass storeObject) {
